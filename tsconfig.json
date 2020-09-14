@@ -1,0 +1,15 @@
+{
+    "include": ["src", "test"],
+    "exclude": ["node_modules"],
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "outDir": "dist",
+        "noImplicitAny": true,
+        "module": "es6",
+        "target": "ESNext",
+        "lib": ["DOM", "ESNext"],
+        "jsx": "react",
+        "allowJs": true
+    }
+}
