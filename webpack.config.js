@@ -8,7 +8,7 @@ const pkg = JSON.parse(fs.readFileSync("package.json"));
 
 const common = {
     entry: {
-            freeminance: path.resolve(__dirname, "src", "scripts", "index.ts"),
+        freeminance: path.resolve(__dirname, "src", "lib", "index.ts"),
     },
     output: {
         filename: "[name].js",
@@ -43,6 +43,9 @@ const common = {
     resolve: {
         extensions: [".ts", ".tsx", ".js"],
     },
+    performance: {
+        hints: false,
+    },
     plugins: [
         new MiniCssExtractPlugin(),
         new HtmlWebpackPlugin({
@@ -76,7 +79,19 @@ const production = {
     mode: "production",
 };
 
+const live = {
+    ...development,
+    devServer: {
+        historyApiFallback: true,
+        contentBase: path.resolve(__dirname, "dist"),
+        compress: true,
+        port: 9000,
+    },
+};
+
 module.exports = [
+    // webpack-dev-server must be first
+    { ...live, name: "live" },
     { ...development, name: "development" },
     { ...production, name: "production" },
 ];
