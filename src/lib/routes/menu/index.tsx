@@ -17,6 +17,7 @@ export function Menu(props: MenuProps) {
         <div>
             <h1>Main Menu</h1>
             <Link to="/menu/example">Example</Link>
+            <Link to="/game">Play</Link>
             <button onClick={() => props.setPref("hello", "there")}>Click</button>
         </div>
     );
