@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import createStore from "./store";
+import { initDB } from "./db";
 import { Home } from "./routes/home";
 import Menu from "./routes/menu";
 import { Game } from "./routes/game";
@@ -31,6 +32,10 @@ function render(target: HTMLElement) {
     );
 }
 
-export function init(target: HTMLElement) {
+export async function init(target: HTMLElement) {
+    // Initialise the database
+    await initDB(); 
+
+    // First render
     render(target);
 }

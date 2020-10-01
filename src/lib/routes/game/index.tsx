@@ -15,6 +15,7 @@ const StyledCanvas = styled.canvas`
     width: 100%;
     height: 100%;
     touch-action: none;
+    outline: none;
 `;
 
 export function Game() {
@@ -46,6 +47,7 @@ export function Game() {
                 // Resize the engine
                 gameEngine.resize();
             };
+            resizer();
             window.addEventListener("resize", resizer);
 
             // Assign to state

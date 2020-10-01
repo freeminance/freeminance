@@ -1,4 +1,6 @@
 import "../styles/index.less";
 import { init } from "./app";
 
-init(document.getElementById("main"));
+(async () => {
+    await init(document.getElementById("main"));
+})();

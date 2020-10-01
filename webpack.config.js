@@ -38,6 +38,10 @@ const common = {
                 exclude: /node_modules/,
                 use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"],
             },
+            {
+                test: /\.ttf/,
+                use: "url-loader",
+            },
         ],
     },
     resolve: {

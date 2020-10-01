@@ -1,11 +1,16 @@
 import { applyMiddleware, combineReducers, createStore, Store } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { batchDispatchMiddleware } from "redux-batched-actions";
+import createSagaMiddleWare from "redux-saga";
 
+import { reducer as game } from "./game/reducer";
+import { GameAction } from "./game/types";
 import { reducer as preferences } from "./preferences/reducer";
+import prefSagas from "./preferences/sagas";
 import { PrefAction } from "./preferences/types";
 
 const reducers = {
+    game,
     preferences,
 };
 
@@ -17,15 +22,21 @@ declare module "react-redux" {
     interface DefaultRootState extends StoreState {}
 }
 
-export type StoreAction = PrefAction;
+export type StoreAction = GameAction | PrefAction;
 
 export default function (): Store<StoreState, StoreAction> {
     const composeEnhancers = composeWithDevTools({
         name: "freeminance",
     });
 
-    return createStore<StoreState, StoreAction, unknown, unknown>(
+    const sagaMiddleware = createSagaMiddleWare();
+
+    const store = createStore<StoreState, StoreAction, unknown, unknown>(
         combineReducers(reducers),
-        composeEnhancers(applyMiddleware(batchDispatchMiddleware))
+        composeEnhancers(applyMiddleware(batchDispatchMiddleware, sagaMiddleware))
     );
+
+    sagaMiddleware.run(prefSagas);
+
+    return store;
 }
