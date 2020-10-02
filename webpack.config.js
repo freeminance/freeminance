@@ -6,9 +6,21 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const pkg = JSON.parse(fs.readFileSync("package.json"));
 
+const recursiveIssuer = m => {
+    if (m.issuer) {
+        return recursiveIssuer(m.issuer);
+    } else if (m.name) {
+        return m.name;
+    } else {
+        return false;
+    }
+};
+
 const common = {
     entry: {
         freeminance: path.resolve(__dirname, "src", "lib", "index.ts"),
+        styles: path.resolve(__dirname, "src", "styles", "index.less"),
+        theme: path.resolve(__dirname, "src", "styles", "theme", "index.less"),
     },
     output: {
         filename: "[name].js",
@@ -39,8 +51,12 @@ const common = {
                 use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"],
             },
             {
-                test: /\.ttf/,
+                test: /\.ttf$/,
                 use: "url-loader",
+            },
+            {
+                test: /\.svg$/,
+                use: ["@svgr/webpack"],
             },
         ],
     },
@@ -51,7 +67,9 @@ const common = {
         hints: false,
     },
     plugins: [
-        new MiniCssExtractPlugin(),
+        new MiniCssExtractPlugin({
+            filename: "[name].css",
+        }),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "src", "templates", "index.pug"),
             templateParameters: {
@@ -67,6 +85,18 @@ const common = {
                 vendor: {
                     chunks: "all",
                     test: /node_modules/,
+                },
+                styles: {
+                    name: "styles",
+                    test: (m, c, entry = "main") => m.constructor.name === "CSSModule" && recursiveIssuer(m) === entry,
+                    chunks: "all",
+                    enforce: true,
+                },
+                theme: {
+                    name: "theme",
+                    test: (m, c, entry = "theme") => m.constructor.name === "CSSModule" && recursiveIssuer(m) === entry,
+                    chunks: "all",
+                    enforce: true,
                 },
             },
         },
@@ -93,9 +123,29 @@ const live = {
     },
 };
 
+const storybook = {
+    ...development,
+    module: {
+        ...development.module,
+        rules: development.module.rules.map((rule, i) => {
+            if (i === 2) {
+                return {
+                    ...rule,
+                    use: ["style-loader", ...rule.use.slice(1)],
+                };
+            } else {
+                return rule;
+            }
+        }),
+    },
+};
+
 module.exports = [
     // webpack-dev-server must be first
     { ...live, name: "live" },
+    // storybook setup
+    { ...storybook, name: "storybook" },
+    // Regular development setups
     { ...development, name: "development" },
     { ...production, name: "production" },
 ];

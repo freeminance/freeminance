@@ -1,0 +1,44 @@
+.button.basic {
+    color: @base-color;
+    background: @base-bg;
+    border-width: 0.15em;
+    border-style: solid;
+    border-color: @base-accent;
+    border-radius: 0.55em;
+    font-family: @font-ui;
+    font-size: 1em;
+    padding: 0.15em 0.25em;
+    width: min-content;
+    display: grid;
+    justify-content: center;
+    min-height: 1.5em;
+    max-height: 1.5em;
+    overflow: hidden;
+    align-items: center;
+    white-space: nowrap;
+
+    svg {
+        fill: @base-color;
+        stroke: @base-color;
+        border: 1px solid red;
+        min-width: 1em;
+        min-height: 1em;
+    }
+
+    &:not(.disabled) {
+        cursor: pointer;
+    }
+
+    &.disabled {
+        cursor: not-allowed;
+        background: @base-disabled;
+        border-color: darken(@base-disabled, 10%);
+        color: darken(@base-color, 25%);
+
+        svg {
+            fill: darken(@base-color, 25%);
+            stroke: darken(@base-color, 25%);
+        }
+    }
+
+}

@@ -32,10 +32,14 @@ function render(target: HTMLElement) {
     );
 }
 
-export async function init(target: HTMLElement) {
-    // Initialise the database
-    await initDB(); 
+export async function init(target: HTMLElement | null) {
+    if (target) {
+        // Initialise the database
+        await initDB();
 
-    // First render
-    render(target);
+        // First render
+        render(target);
+    } else {
+        throw Error("No element provided to root render");
+    }
 }

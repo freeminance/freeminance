@@ -8,9 +8,10 @@
         "noImplicitAny": true,
         "module": "es6",
         "moduleResolution": "node",
-        "target": "ESNext",
+        "target": "ES2019",
         "lib": ["DOM", "ESNext"],
         "jsx": "react",
-        "allowJs": true
+        "allowJs": true,
+        "strict": true
     }
 }

@@ -8,6 +8,13 @@ export const enum GameTerrain {
     RainForest = "rain-forest",
 }
 
+export interface GameUIState {
+    views: {
+        id: string;
+        state: any;
+    }[];
+}
+
 /**
  * Game state expressed as a single structure.
  */
@@ -16,6 +23,9 @@ export interface GameState {
         turn: number;
         year: number;
         pace: number;
+    };
+
+    ui?: {
     };
 
     map: {
